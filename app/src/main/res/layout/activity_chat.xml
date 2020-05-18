@@ -29,19 +29,13 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/bt_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/noadd" />
-
             <EditText
                 android:id="@+id/et_write"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_edittext_selector"
                 android:hint="请输入发送内容"
@@ -52,6 +46,12 @@
                 android:textColorHint="#AAAAAA"
                 android:textSize="15dip" />
 
+            <ImageButton
+                android:id="@+id/bt_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/noadd" />
 
             <ImageButton
                 android:id="@+id/bt_send"

@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.bluechat.Adapter.ViewPagerAdapter;
 import com.example.bluechat.Fragment.HomeFragment;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment());
-//        adapter.addFragment(new SettingFragment());
+        adapter.addFragment(new SettingFragment());
         viewPager.setAdapter(adapter);
     }
 

@@ -9,12 +9,15 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +27,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bluechat.Activity.ChatActivity;
 import com.example.bluechat.Activity.GroupActivity;
-import com.example.bluechat.Activity.MainActivity;
 import com.example.bluechat.Adapter.ItemBtListAdapter;
 import com.example.bluechat.Bean.BlueToothBean;
 import com.example.bluechat.CallBack.BlueToothInterface;
@@ -37,8 +40,8 @@ import com.example.bluechat.R;
 import com.example.bluechat.Receiver.BluetoothStateBroadcastReceive;
 import com.example.bluechat.Service.BluetoothChatService;
 import com.example.bluechat.Util.BluetoothUtil;
+import com.example.bluechat.Util.PermissionUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -55,17 +58,29 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private BluetoothUtil bluetoothUtil;
     private BluetoothStateBroadcastReceive broadcastReceive;
     private SwipeRefreshLayout layoutSwipeRefresh;
+    private TableLayout layoutSetting;
     private ListView lvBtList;
     private List<BlueToothBean> list;
     private List<BlueToothBean> groupAddlist;
     private ItemBtListAdapter adapter;
-    private LinearLayout layoutHide;
     private ProgressDialog progressDialog;
     private BluetoothChatService mBluetoothChatService;
-    private TextView tv1, tv2;
+    private TextView tv1, tv2, tv3;
     private RelativeLayout groupBox;
     private Button btnAddGroup;
     private ListView groupList;
+    private TextView tvBt;
+    private CardView cvBtSwitch;
+    private CardView cvBtSetting;
+    private CardView cvBtQxSetting;
+    private static final int COLOR_ACTIVE_BG = Color.parseColor("#ffffff");
+    private static final int COLOR_ACTIVE_TEXT = Color.parseColor("#4CAF50");
+    private static final int COLOR_INACTIVE_BG = Color.parseColor("#4CAF50");
+    private static final int COLOR_INACTIVE_TEXT = Color.parseColor("#ffffff");
+    private static final int COLOR_OPEN = Color.parseColor("#4DB6AC");
+    private static final int COLOR_CLOSE = Color.parseColor("#a2a3a3");
+    private static final String VALUE_OPEN = "Bluetooth Enabled\nClose Down";
+    private static final String VALUE_CLOSE = "Bluetooth Disabled\nOpen Up";
 
     private BlueToothInterface blueToothInterface = new BlueToothInterface() {
         @Override
@@ -173,10 +188,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onViewCreated(view, savedInstanceState);
         bluetoothUtil = new BluetoothUtil(getContext());
         layoutSwipeRefresh = view.findViewById(R.id.layout_swipe_refresh);
+        layoutSetting = view.findViewById(R.id.layout_setting);
         layoutSwipeRefresh.setOnRefreshListener(this);
         lvBtList = view.findViewById(R.id.lv_bt_list);
         tv1 = view.findViewById(R.id.tv1);
         tv2 = view.findViewById(R.id.tv2);
+        tv3 = view.findViewById(R.id.tv3);
         groupBox = view.findViewById(R.id.groupBox);
         btnAddGroup = view.findViewById(R.id.btnAddGroup);
         groupList = view.findViewById(R.id.groupList);
@@ -185,31 +202,83 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         adapter = new ItemBtListAdapter(list, getContext());
         lvBtList.setAdapter(adapter);
         lvBtList.setOnItemClickListener(this);
-        layoutHide = view.findViewById(R.id.layout_hide);
+        tvBt = view.findViewById(R.id.tv_bt);
+        cvBtSwitch = view.findViewById(R.id.cv_bt_switch);
+        cvBtSetting = view.findViewById(R.id.cv_bt_setting);
+        cvBtQxSetting = view.findViewById(R.id.cv_bt_qx_setting);
+        initBtSwitch();
         update();
         registerBluetoothReceiver();
 
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv1.setTextColor(0xFFFFFFFF);
-                tv1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                tv2.setTextColor(0xFF000000);
-                tv2.setBackgroundColor(0xFFFFFFFF);
+                tv1.setTextColor(COLOR_ACTIVE_TEXT);
+                tv1.setBackgroundColor(COLOR_ACTIVE_BG);
+                tv2.setTextColor(COLOR_INACTIVE_TEXT);
+                tv2.setBackgroundColor(COLOR_INACTIVE_BG);
+                tv3.setTextColor(COLOR_INACTIVE_TEXT);
+                tv3.setBackgroundColor(COLOR_INACTIVE_BG);
                 layoutSwipeRefresh.setVisibility(View.VISIBLE);
                 groupBox.setVisibility(View.GONE);
+                layoutSetting.setVisibility(View.GONE);
             }
         });
 
         tv2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv2.setTextColor(0xFFFFFFFF);
-                tv2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                tv1.setTextColor(0xFF000000);
-                tv1.setBackgroundColor(0xFFFFFFFF);
+                tv1.setTextColor(COLOR_INACTIVE_TEXT);
+                tv1.setBackgroundColor(COLOR_INACTIVE_BG);
+                tv2.setTextColor(COLOR_ACTIVE_TEXT);
+                tv2.setBackgroundColor(COLOR_ACTIVE_BG);
+                tv3.setTextColor(COLOR_INACTIVE_TEXT);
+                tv3.setBackgroundColor(COLOR_INACTIVE_BG);
                 layoutSwipeRefresh.setVisibility(View.GONE);
                 groupBox.setVisibility(View.VISIBLE);
+                layoutSetting.setVisibility(View.GONE);
+            }
+        });
+
+        tv3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv1.setTextColor(COLOR_INACTIVE_TEXT);
+                tv1.setBackgroundColor(COLOR_INACTIVE_BG);
+                tv2.setTextColor(COLOR_INACTIVE_TEXT);
+                tv2.setBackgroundColor(COLOR_INACTIVE_BG);
+                tv3.setTextColor(COLOR_ACTIVE_TEXT);
+                tv3.setBackgroundColor(COLOR_ACTIVE_BG);
+                layoutSwipeRefresh.setVisibility(View.GONE);
+                groupBox.setVisibility(View.GONE);
+                layoutSetting.setVisibility(View.VISIBLE);
+            }
+        });
+
+        cvBtSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bluetoothUtil.isBluetoothEnable() && tvBt.getText().equals(VALUE_OPEN)) {
+                    bluetoothUtil.disableBluetooth();
+                    tvBt.setText(VALUE_CLOSE);
+                }
+                else {
+                    bluetoothUtil.openBluetooth();
+                    tvBt.setText(VALUE_OPEN);
+                }
+            }
+        });
+        cvBtSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        cvBtQxSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PermissionUtil(getContext()).open();
             }
         });
 
@@ -261,6 +330,16 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    private void initBtSwitch() {
+        if (bluetoothUtil.isBluetoothEnable()) {
+            cvBtSwitch.setCardBackgroundColor(COLOR_OPEN);
+            tvBt.setText(VALUE_OPEN);
+        } else {
+            cvBtSwitch.setCardBackgroundColor(COLOR_CLOSE);
+            tvBt.setText(VALUE_CLOSE);
+        }
+    }
+
     private void registerBluetoothReceiver() {
         Log.i("zjh", "蓝牙广播监听启动");
         if (broadcastReceive == null) {
@@ -294,7 +373,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         layoutSwipeRefresh.setRefreshing(true);
         list.clear();
         if (bluetoothUtil.isBluetoothEnable()) {
-            layoutHide.setVisibility(View.INVISIBLE);
             List<BlueToothBean> alltmp = bluetoothUtil.getDevicesList();
 //            list.addAll(bluetoothUtil.getDevicesList());
             for (BlueToothBean blueToothBean : alltmp) {
@@ -307,7 +385,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             list.addAll(BlueToothBean.listAll(BlueToothBean.class));
 
         } else {
-            layoutHide.setVisibility(View.VISIBLE);
             layoutSwipeRefresh.setRefreshing(false);
         }
         adapter.notifyDataSetChanged();
@@ -393,7 +470,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onDestroy() {
-        Log.i("zjh-onDestroy", "Home关闭");
+        Log.i("zjh-onDestroy", "Home 关闭");
         super.onDestroy();
         unregisterBluetoothReceiver();
         bluetoothUtil.close();

@@ -10,7 +10,6 @@
         android:shrinkColumns="0,1,2">
 
         <TableRow>
-
             <android.support.v7.widget.CardView
                 android:id="@+id/cv_bt_switch"
                 android:layout_width="0dp"
@@ -53,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="蓝牙设置"
+                    android:text="Bluetooth Setting"
                     android:textColor="#fff"
                     android:textSize="20dp" />
 
@@ -61,7 +60,6 @@
         </TableRow>
 
         <TableRow>
-
             <android.support.v7.widget.CardView
                 android:id="@+id/cv_bt_qx_setting"
                 android:layout_width="0dp"
@@ -80,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="需要开启蓝牙、定位、读写手机存储权限"
+                    android:text="Permission Access"
                     android:textColor="#fff"
                     android:textSize="20dp" />
 
@@ -94,5 +92,4 @@
         </TableRow>
 
     </TableLayout>
-
 </ScrollView>

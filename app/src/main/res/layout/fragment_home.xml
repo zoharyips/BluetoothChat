@@ -1,57 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/topBox"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="蓝牙搜索"
-            android:layout_weight="1"
-            android:textSize="22sp"
-            android:background="@color/colorPrimary"
-            android:textColor="#FFF"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="群聊"
-            android:textSize="22sp"
-            android:textColor="#000"
-            android:layout_weight="1"
-            android:gravity="center"/>
-
-    </LinearLayout>
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/topBox">
+        android:layout_height="match_parent">
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/layout_swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <ListView
                 android:id="@+id/lv_bt_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"
-                android:dividerHeight="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
                 android:scrollbars="none" />
-
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <RelativeLayout
@@ -64,38 +29,142 @@
                 android:id="@+id/btnAddGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="新建群聊"/>
+                android:text="Add Group"/>
 
             <ListView
                 android:id="@+id/groupList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/btnAddGroup"></ListView>
+                android:layout_below="@id/btnAddGroup"/>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_hide"
-            android:layout_width="wrap_content"
+        <TableLayout
+            android:id="@+id/layout_setting"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:shrinkColumns="0,1,2"
+            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/bg_home" />
+            <TableRow>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_bt_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="#a2a3a3"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:contentPadding="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="蓝牙未开启"
-                android:textColor="#707070" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_bt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="#fff"
+                        android:textSize="20dp" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_bt_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="#FF8A65"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:contentPadding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Bluetooth Setting"
+                        android:textColor="#fff"
+                        android:textSize="20dp" />
+
+                </android.support.v7.widget.CardView>
+            </TableRow>
+
+            <TableRow>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_bt_qx_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="#AED581"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:contentPadding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Permission Access"
+                        android:textColor="#fff"
+                        android:textSize="20dp" />
+
+                </android.support.v7.widget.CardView>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1" />
+            </TableRow>
+        </TableLayout>
     </RelativeLayout>
 
-
-
+    <!-- 三个菜单 -->
+    <LinearLayout
+        android:id="@+id/topBox"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Chat"
+            android:layout_weight="1"
+            android:textSize="22sp"
+            android:background="#fff"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="GroupChat"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:layout_weight="1"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Setting"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            android:background="@color/colorPrimary"
+            android:layout_weight="1"
+            android:gravity="center"/>
+    </LinearLayout>
 </RelativeLayout>

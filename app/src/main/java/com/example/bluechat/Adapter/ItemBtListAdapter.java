@@ -3,12 +3,10 @@ package com.example.bluechat.Adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.support.v7.widget.CardView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,32 +46,28 @@ public class ItemBtListAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.item_bt_list, null);
             convertView.setTag(new ViewHolder(convertView));
         }
-        initializeViews(getItem(position), (ViewHolder) convertView.getTag(), position);
+        initializeViews(getItem(position), (ViewHolder) convertView.getTag());
         return convertView;
     }
 
-    private void initializeViews(BlueToothBean object, ViewHolder holder, int position) {
-        if (position % 2 == 0)
-            holder.layoutItem.setBackgroundColor(Color.parseColor("#EF9A9A"));
-        else
-            holder.layoutItem.setBackgroundColor(Color.parseColor("#9FA8DA"));
+    private void initializeViews(BlueToothBean object, ViewHolder holder) {
         holder.tvBtName.setText(object.getName());
         holder.tvBtMac.setText(object.getMac());
         if (object.getScore()<0)
         {
-            holder.tvFlag.setText("新设备");
+            holder.tvFlag.setText("NEW");
         }
         else if (object.getScore()>=0 && object.getScore()<60)
         {
-            holder.tvFlag.setText("危险");
+            holder.tvFlag.setText("Danger");
         }
         else if (object.getScore()>=60 && object.getScore()<70)
         {
-            holder.tvFlag.setText("较信任");
+            holder.tvFlag.setText("Trust");
         }
         else if (object.getScore()>=70 )
         {
-            holder.tvFlag.setText("非常信任");
+            holder.tvFlag.setText("Trusted");
         }
     }
 

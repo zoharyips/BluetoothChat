@@ -7,7 +7,7 @@
         android:id="@+id/tvTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="#9b9b9b"
         android:text=""
         android:textColor="#FFF"
         android:padding="10dp"
